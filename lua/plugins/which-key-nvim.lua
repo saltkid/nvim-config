@@ -1,0 +1,14 @@
+local utils = require 'utils'
+
+vim.pack.add { utils.gh 'folke/which-key.nvim' }
+require('which-key').setup { ---@diagnostic disable-line: missing-fields
+  delay = 0,
+  icons = { mappings = vim.g.have_nerd_font },
+  -- Document existing key chains
+  spec = {
+    { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
+    { '<leader>t', group = '[T]oggle' },
+    { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } }, -- Enable gitsigns recommended keymaps first
+    { 'gr', group = 'LSP Actions', mode = { 'n' } },
+  },
+}
