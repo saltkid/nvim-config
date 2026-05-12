@@ -107,7 +107,7 @@
     },
     "wezterm-types": {
       "rev": "db57759001c8d8a5ddc85ebaaf7e453323868063",
-      "src": "https://github.com/justinsgithub/wezterm-types"
+      "src": "https://github.com/DrKJeff16/wezterm-types"
     },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",

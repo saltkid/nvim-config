@@ -44,4 +44,57 @@ function M.run_build(name, cmd, cwd)
   end
 end
 
+--[[
+Requires all `.lua` files in the given `path` (except `init.lua`). If a
+directory contains `init.lua`, require that directory as a module.
+
+This function should be used in `init.lua` to require everything else in the
+directory.
+
+Example:
+```
+plugins/
+|__ init.lua
+|__ foo.lua
+|__ bar/
+    |__ init.lua
+    |__ baz.lua
+```
+If you call this function in init.lua:
+  ```lua
+  require_all_in("plugins", "plugins.")
+  ```
+the results would be:
+  ```lua
+  require("plugins.foo")
+  require("plugins.bar")
+  ```
+If you call this function in bar/init.lua:
+  ```lua
+  require_all_in("plugins/bar", "plugins.bar.")
+  ```
+the results would be:
+  ```lua
+  require("plugins.baz")
+  ```
+--]]
+---@param path string directory to scan. must be full path.
+---@param module_prefix string lua module prefix, e.g. "plugins.", "plugins.bar"
+function M.require_all_in(path, module_prefix)
+  for name, ftype in vim.fs.dir(path) do
+    local full_path = vim.fs.joinpath(path, name)
+    if ftype == 'file' then
+      if name:match '%.lua$' and name ~= 'init.lua' then
+        local module = name:gsub('%.lua$', '')
+        require(module_prefix .. module)
+      end
+    elseif ftype == 'directory' then
+      local init_file = vim.fs.joinpath(full_path, 'init.lua')
+      if vim.uv.fs_stat(init_file) then
+        require(module_prefix .. name)
+      end
+    end
+  end
+end
+
 return M
