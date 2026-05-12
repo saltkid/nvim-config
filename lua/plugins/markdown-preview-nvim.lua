@@ -1,22 +1,24 @@
 local utils = require 'utils'
 
-vim.pack.add { utils.gh 'iamcco/markdown-preview.nvim' }
-
 -- build
 vim.api.nvim_create_autocmd('PackChanged', {
   callback = function(ev)
     local name = ev.data.spec.name
-    if ev.data.kind ~= 'install' then
+    local kind = ev.data.kind
+    if kind ~= 'install' and kind ~= 'update' then
       return
     end
-    if name == 'LuaSnip' then
-      if vim.fn.executable 'npm' == 1 then
-        vim.fn['mkdp#util#install']()
+    if name == 'markdown-preview.nvim' then
+      if not ev.data.active then
+        vim.cmd.packadd(name)
       end
+      vim.fn['mkdp#util#install']()
       return
     end
   end,
 })
+
+vim.pack.add { utils.gh 'iamcco/markdown-preview.nvim' }
 
 -- config
 vim.g.mkdp_auto_close = 1
