@@ -106,10 +106,16 @@ vim.pack.add {
   utils.gh 'mason-org/mason-lspconfig.nvim',
   utils.gh 'WhoIsSethDaniel/mason-tool-installer.nvim',
 }
-require('mason').setup {}
+require('mason').setup {
+  registries = {
+    'github:mason-org/mason-registry',
+    'github:Crashdummyy/mason-registry',
+  },
+}
 local ensure_installed = vim.tbl_keys(servers or {})
 vim.list_extend(ensure_installed, {
   -- You can add other tools here that you want Mason to install
+  'roslyn', -- added here since registries above need to be registered first
 })
 
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -118,4 +124,24 @@ for name, server in pairs(servers) do
   vim.lsp.config(name, server)
   vim.lsp.enable(name)
 end
+-- }}}
+
+-- MANUAL SETUP {{{
+vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
+  pattern = { '*.xaml', '*.axaml' },
+  callback = function(event)
+    vim.lsp.start {
+      name = 'avalonia',
+      cmd = { 'avalonia-ls' }, -- from https://github.com/SaverinOnRails/ls-for-avalonia
+      root_dir = vim.fn.getcwd(),
+    }
+  end,
+})
+
+vim.filetype.add {
+  extension = {
+    xaml = 'xml',
+    axaml = 'xml',
+  },
+}
 -- }}}
