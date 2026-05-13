@@ -55,17 +55,11 @@ vim.pack.add {
   utils.gh 'mason-org/mason-lspconfig.nvim',
   utils.gh 'WhoIsSethDaniel/mason-tool-installer.nvim',
 }
-require('mason').setup {
-  registries = {
-    'github:mason-org/mason-registry',
-    'github:Crashdummyy/mason-registry',
-  },
-}
+require('mason').setup {}
 local ensure_installed = vim.tbl_keys(servers or {})
 vim.list_extend(ensure_installed, vim.tbl_keys(formatters or {}))
 vim.list_extend(ensure_installed, {
   -- You can add other tools here that you want Mason to install
-  'roslyn', -- added here since registries above need to be registered first
 })
 
 require('mason-tool-installer').setup { ensure_installed = ensure_installed }
