@@ -1,3 +1,5 @@
+local utils = require 'utils'
+
 -- NOTE: kept here since its the only one using this for now
 vim.filetype.add {
   extension = {
@@ -31,25 +33,7 @@ vim.api.nvim_create_autocmd('FileType', {
     if not root then
       return
     end
-    vim.lsp.start {
-      name = 'avalonia',
-      cmd = { 'avalonia-ls' }, -- from https://github.com/SaverinOnRails/ls-for-avalonia
-      root_dir = vim.fn.getcwd(),
-    }
-  end,
-})
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'xml',
-  group = avalonia_ls_group,
-  callback = function(event)
-    local name = vim.api.nvim_buf_get_name(event.buf)
-    if not name:match '%.axaml$' or name:match '%.xaml$' then
-      return
-    end
-    local root = get_project_root(event.buf)
-    if not root then
-      return
-    end
+    utils.run_build('run solution parser', { 'avalonia-solution-parser', '.' }, root)
     vim.lsp.start {
       name = 'avalonia',
       cmd = { 'avalonia-ls' }, -- from https://github.com/SaverinOnRails/ls-for-avalonia
