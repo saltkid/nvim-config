@@ -42,6 +42,10 @@ local servers = {
     },
   },
 }
+local formatters = {
+  csharpier = {},
+  jq = {},
+}
 -- }}}
 
 -- MASON {{{
@@ -58,6 +62,7 @@ require('mason').setup {
   },
 }
 local ensure_installed = vim.tbl_keys(servers or {})
+vim.list_extend(ensure_installed, vim.tbl_keys(formatters or {}))
 vim.list_extend(ensure_installed, {
   -- You can add other tools here that you want Mason to install
   'roslyn', -- added here since registries above need to be registered first

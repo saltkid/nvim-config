@@ -22,6 +22,7 @@ require('conform').setup {
     lua = { 'stylua' },
     python = { 'ruff_organize_imports', 'ruff_fix', 'ruff_format' },
     json = { 'jq' },
+    cs = { 'csharpier' },
   },
 }
 utils.map('<leader>f', function()
